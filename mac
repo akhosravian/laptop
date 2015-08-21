@@ -86,14 +86,13 @@ brew_launchctl_restart() {
   launchctl load "$HOME/Library/LaunchAgents/$plist" >/dev/null
 }
 
-gem_install_or_update() {
-  if gem list "$1" --installed > /dev/null; then
+pip_install_or_update() {
+  if pip list | grep "$1" > /dev/null; then
     fancy_echo "Updating %s ..." "$1"
-    gem update "$@"
+    pip install -U "$1"
   else
     fancy_echo "Installing %s ..." "$1"
-    gem install "$@"
-    rbenv rehash
+    pip install "$1"
   fi
 }
 
