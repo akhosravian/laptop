@@ -86,7 +86,11 @@ brew_launchctl_restart() {
   launchctl load "$HOME/Library/LaunchAgents/$plist" >/dev/null
 }
 
-pip_install_or_update() {
+cask_install() {
+  brew cask install "$1" 2> /dev/null
+}
+
+pip_install_or_upgrade() {
   if pip list | grep "$1" > /dev/null; then
     fancy_echo "Updating %s ..." "$1"
     pip install -U "$1"
@@ -114,58 +118,20 @@ fi
 fancy_echo "Updating Homebrew formulas ..."
 brew update
 
-brew_install_or_upgrade 'zsh'
-brew_install_or_upgrade 'git'
-brew_install_or_upgrade 'postgres'
-brew_launchctl_restart 'postgresql'
-brew_install_or_upgrade 'redis'
-brew_launchctl_restart 'redis'
-brew_install_or_upgrade 'the_silver_searcher'
-brew_install_or_upgrade 'vim'
-brew_install_or_upgrade 'ctags'
-brew_install_or_upgrade 'tmux'
-brew_install_or_upgrade 'reattach-to-user-namespace'
-brew_install_or_upgrade 'imagemagick'
-brew_install_or_upgrade 'qt'
-brew_install_or_upgrade 'hub'
-brew_install_or_upgrade 'node'
+brew_install_or_upgrade 'perforce'
+brew_install_or_upgrade 'python'
 
-brew_install_or_upgrade 'rbenv'
-brew_install_or_upgrade 'ruby-build'
+pip install --upgrade pip
+pip_install_or_upgrade 'p4python'
+pip_install_or_upgrade 'jenkinsapi'
+pip_install_or_upgrade 'pyyaml'
+pip_install_or_upgrade 'enum34'
+pip_install_or_upgrade 'retrying'
+pip_install_or_upgrade 'requests'
+pip_install_or_upgrade 'boto3'
 
-# shellcheck disable=SC2016
-append_to_initialization_file 'eval "$(rbenv init - --no-rehash zsh)"' 1
+brew_install_or_upgrade 'caskroom/cask/brew-cask'
+cask_install 'java'
+cask_install 'unity'
 
-brew_install_or_upgrade 'openssl'
-brew unlink openssl && brew link openssl --force
-brew_install_or_upgrade 'libyaml'
-
-ruby_version="$(curl -sSL http://ruby.thoughtbot.com/latest)"
-
-eval "$(rbenv init - zsh)"
-
-if ! rbenv versions | grep -Fq "$ruby_version"; then
-  rbenv install -s "$ruby_version"
-fi
-
-rbenv global "$ruby_version"
-rbenv shell "$ruby_version"
-
-gem update --system
-
-gem_install_or_update 'bundler'
-
-fancy_echo "Configuring Bundler ..."
-  number_of_cores=$(sysctl -n hw.ncpu)
-  bundle config --global jobs $((number_of_cores - 1))
-
-brew_install_or_upgrade 'heroku-toolbelt'
-
-if ! command -v rcup >/dev/null; then
-  brew_tap 'thoughtbot/formulae'
-  brew_install_or_upgrade 'rcm'
-fi
-
-if [ -f "$HOME/.laptop.local" ]; then
-  . "$HOME/.laptop.local"
-fi
+brew_install_or_upgrade 'android'
