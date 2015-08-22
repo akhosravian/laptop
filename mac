@@ -132,7 +132,8 @@ pip_install_or_upgrade 'boto3'
 brew_tap 'homebrew/binary'
 brew_install_or_upgrade 'perforce'
 
-brew_install_or_upgrade 'caskroom/cask/brew-cask'
+brew_tap 'caskroom/cask'
+brew_install_or_upgrade 'brew-cask'
 cask_install 'java'
 cask_install 'unity'
 
