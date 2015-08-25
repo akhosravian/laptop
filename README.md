@@ -29,6 +29,12 @@ less mac
 sh mac 2>&1 | tee ~/laptop.log
 ```
 
+Install scripts:
+```sh
+curl --remote-name https://raw.githubusercontent.com/akhosravian/laptop/master/certs
+sh certs
+```
+
 Debugging
 ---------
 
