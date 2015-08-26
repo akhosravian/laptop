@@ -32,6 +32,8 @@ set -e
 
 if [ ! -f "$HOME/.bash_profile" ]; then
   touch "$HOME/.bash_profile"
+else
+  source "$HOME/.bash_profile"
 fi
 
 # shellcheck disable=SC2016
