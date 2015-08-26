@@ -5,8 +5,11 @@ import subprocess
 
 from subprocess import Popen, PIPE
 
-def _set_value(plist_path, key, value):
+def _set_string_value(plist_path, key, value):
     subprocess.call(['plutil', '-replace', key, '-string', value, plist_path])
+
+def _set_int_value(plist_path, key, value):
+    subprocess.call(['plutil', '-replace', key, '-integer', value, plist_path])
 
 def _get_jdk_home():
     proc = Popen(['/usr/libexec/java_home'], stdout=PIPE)
@@ -29,8 +32,9 @@ def _check_unity_not_running():
 if __name__ == '__main__':
     _check_unity_not_running()
     plist_path = os.path.expanduser('~/Library/Preferences/com.unity3d.UnityEditor5.x.plist')
-    _set_value(plist_path, 'CacheServerIPAddress', 'cardscachebox')
-    _set_value(plist_path, 'JdkPath', _get_jdk_home())
-    _set_value(plist_path, 'AndroidSdkRoot', _get_android_sdk_home())
+    _set_string_value(plist_path, 'CacheServerIPAddress', 'cardscachebox')
+    _set_string_value(plist_path, 'CacheServerEnabled', 1)
+    _set_string_value(plist_path, 'JdkPath', _get_jdk_home())
+    _set_string_value(plist_path, 'AndroidSdkRoot', _get_android_sdk_home())
     _invalidate_plist_cache(plist_path)
 
