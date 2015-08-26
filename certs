@@ -5,6 +5,15 @@ if [ $# -eq 0 ]
   else 
     pw=$1
 fi
+
+if ! command -v p4 >/dev/null; then
+    source ~/.bash_profile
+    if ! command -v p4 >/dev/null; then
+        echo "p4 not in path; aborting"
+        exit 1
+    fi
+fi
+
 echo "$pw" | p4 login > /dev/null
 p4 -c pvzcards_certs sync -f //... > /dev/null
 pushd /pvzcards_certs > /dev/null
