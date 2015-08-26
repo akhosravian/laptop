@@ -20,8 +20,14 @@ def _get_android_sdk_home():
 def _invalidate_plist_cache(plist_path):
     subprocess.call(['defaults', 'read', plist_path])
 
+def _check_unity_not_running():
+    unity_running = not subprocess.call(['pgrep', 'Unity$'])
+    if unity_running:
+        raise Exception("Unity can't be running when this script is run")
+
 
 if __name__ == '__main__':
+    _check_unity_not_running()
     plist_path = os.path.expanduser('~/Library/Preferences/com.unity3d.UnityEditor5.x.plist')
     _set_value(plist_path, 'CacheServerIPAddress', 'cardscachebox')
     _set_value(plist_path, 'JdkPath', _get_jdk_home())
