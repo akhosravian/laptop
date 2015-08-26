@@ -9,7 +9,7 @@ def _set_string_value(plist_path, key, value):
     subprocess.call(['plutil', '-replace', key, '-string', value, plist_path])
 
 def _set_int_value(plist_path, key, value):
-    subprocess.call(['plutil', '-replace', key, '-integer', value, plist_path])
+    subprocess.call(['plutil', '-replace', key, '-integer', str(value), plist_path])
 
 def _get_jdk_home():
     proc = Popen(['/usr/libexec/java_home'], stdout=PIPE)
