@@ -17,9 +17,14 @@ def _get_android_sdk_home():
     options = os.listdir(base_dir)
     return os.path.join(base_dir, max(options))
 
+def _invalidate_plist_cache(plist_path):
+    subprocess.call(['defaults', 'read', plist_path])
+
+
 if __name__ == '__main__':
-    file_path = os.path.expanduser('~/Library/Preferences/com.unity3d.UnityEditor5.x.plist')
-    _set_value(file_path, 'CacheServerIPAddress', 'cardscachebox')
-    _set_value(file_path, 'JdkPath', _get_jdk_home())
-    _set_value(file_path, 'AndroidSdkRoot', _get_android_sdk_home())
+    plist_path = os.path.expanduser('~/Library/Preferences/com.unity3d.UnityEditor5.x.plist')
+    _set_value(plist_path, 'CacheServerIPAddress', 'cardscachebox')
+    _set_value(plist_path, 'JdkPath', _get_jdk_home())
+    _set_value(plist_path, 'AndroidSdkRoot', _get_android_sdk_home())
+    _invalidate_plist_cache(plist_path)
 
