@@ -14,6 +14,11 @@ if ! command -v p4 >/dev/null; then
     fi
 fi
 
+echo "$pw" | sudo -
+mkdir /pvzcards_certs
+chmod a+w /pvzcards_certs
+exit
+
 echo "$pw" | p4 login > /dev/null
 p4 -c pvzcards_certs sync -f //... > /dev/null
 pushd /pvzcards_certs > /dev/null
