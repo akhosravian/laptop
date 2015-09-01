@@ -1,9 +1,9 @@
 #!/bin/sh
 if [ $# -eq 0 ]
   then
-    read -s -p "Enter Password: "  pw
+      read -s -p "Enter login keychain password (probably your network password): "  pw
   else 
-    pw=$1
+      pw=$1
 fi
 
 if ! command -v p4 >/dev/null; then
@@ -14,8 +14,8 @@ if ! command -v p4 >/dev/null; then
     fi
 fi
 
-echo "$pw" | p4 login > /dev/null
-p4 -c pvzcards_certs sync -f //... > /dev/null
+echo "$pw" | p4 -u svc_pvzcards login > /dev/null
+p4 -u svc_pvzcards -c pvzcards_certs sync -f //... > /dev/null
 pushd /pvzcards_certs > /dev/null
 
 #install provisions
@@ -33,6 +33,6 @@ security import ./iOS_Dev_Certificates.p12 -A -k login.keychain -P WWGFD > /dev/
 security lock-keychain login.keychain
 
 popd > /dev/null
-p4 -c pvzcards_certs sync -f //...@0 > /dev/null
+p4 -u svc_pvzcards -c pvzcards_certs sync -f //...@0 > /dev/null
 rm -r /pvzcards_certs
 p4 logout > /dev/null
