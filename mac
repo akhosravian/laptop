@@ -15,7 +15,7 @@ append_to_initialization_file() {
   local text="$1" init_file
   local skip_new_line="${2:-0}"
 
-  init_file="$HOME/.bash_profile"
+  init_file="$HOME/.profile"
 
   if ! grep -Fqs "$text" "$init_file"; then
     if [ "$skip_new_line" -eq 1 ]; then
@@ -30,10 +30,10 @@ trap 'ret=$?; test $ret -ne 0 && printf "failed\n\n" >&2; exit $ret' EXIT
 
 set -e
 
-if [ ! -f "$HOME/.bash_profile" ]; then
-  touch "$HOME/.bash_profile"
+if [ ! -f "$HOME/.profile" ]; then
+  touch "$HOME/.profile"
 else
-  source "$HOME/.bash_profile"
+  source "$HOME/.profile"
 fi
 
 # shellcheck disable=SC2016
