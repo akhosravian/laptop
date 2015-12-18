@@ -1,9 +1,11 @@
 #!/bin/sh
-if [ $# -eq 0 ]
+if [ $# -ne 2 ]
   then
-      read -s -p "Enter login keychain password (probably your network password): "  pw
+      read -s -p "`echo 'Enter svc_pvzcards password: \n\b'`"  svc_pw
+      read -s -p "`echo 'Enter login keychain password (probably your network password): \n\b'`"  pw
   else 
-      pw=$1
+      svc_pw=$1
+      pw=$2
 fi
 
 if ! command -v p4 >/dev/null; then
@@ -14,7 +16,12 @@ if ! command -v p4 >/dev/null; then
     fi
 fi
 
-echo "$pw" | p4 -u svc_pvzcards login > /dev/null
+echo "$svc_pw" | p4 -u svc_pvzcards login > /dev/null
+if [ $? -ne 0 ]
+then
+    echo "Bad password for svc_pvzcards"
+    exit
+fi
 p4 -u svc_pvzcards -c pvzcards_certs sync -f //... > /dev/null
 pushd /pvzcards_certs > /dev/null
 
@@ -35,4 +42,4 @@ security lock-keychain login.keychain
 popd > /dev/null
 p4 -u svc_pvzcards -c pvzcards_certs sync -f //...@0 > /dev/null
 rm -r /pvzcards_certs
-p4 logout > /dev/null
+p4 -u svc_pvzcards logout > /dev/null
