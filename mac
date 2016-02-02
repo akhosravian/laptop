@@ -137,6 +137,5 @@ brew_install_or_upgrade 'perforce'
 
 brew_tap 'caskroom/cask'
 brew_install_or_upgrade 'brew-cask'
-cask_install 'unity'
 
 brew_install_or_upgrade 'android'
