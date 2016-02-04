@@ -37,6 +37,9 @@ done
 security unlock-keychain -p $pw login.keychain
 security import ./ROW_Development.p12 -A -k login.keychain -P jamdat1 > /dev/null
 security import ./iOS_Dev_Certificates.p12 -A -k login.keychain -P WWGFD > /dev/null
+security import ./Enterprise_Distribution.p12 -A -k login.keychain -P jamdat1 > /dev/null
+security import ./ROW_Distribution_1.p12 -A -k login.keychain -P jamdat1 > /dev/null
+security import ./ROW_Distribution_2.p12 -A -k login.keychain -P jamdat1 > /dev/null
 security lock-keychain login.keychain
 
 popd > /dev/null
