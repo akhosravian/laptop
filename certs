@@ -1,11 +1,13 @@
 #!/bin/sh
-if [ $# -ne 2 ]
+if [ $# -ne 3 ]
   then
       read -s -p "`echo 'Enter svc_pvzcards password: \n\b'`"  svc_pw
-      read -s -p "`echo 'Enter login keychain password (probably your network password): \n\b'`"  pw
+      read -s -p "`echo 'Enter login keychain password (probably your network password): \n\b'`"  keychain_pw
+      read -s -p "`echo 'Enter password for signing certificates: \n\b'`"  cert_pw
   else 
       svc_pw=$1
-      pw=$2
+      keychain_pw=$2
+      cert_pw=$3
 fi
 
 if ! command -v p4 >/dev/null; then
@@ -27,19 +29,17 @@ pushd /pvzcards_certs > /dev/null
 
 #install provisions
 mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-for file in *.*provision*; do
+for file in *.mobileprovision; do
     uuid=`grep UUID -A1 -a "$file" | grep -io "[-A-Z0-9]\{36\}"`
     extension="${file##*.}"
     cp -f "$file" ~/Library/MobileDevice/Provisioning\ Profiles/"$uuid.$extension"
 done
 
 #install certs
-security unlock-keychain -p $pw login.keychain
-security import ./ROW_Development.p12 -A -k login.keychain -P jamdat1 > /dev/null
-security import ./iOS_Dev_Certificates.p12 -A -k login.keychain -P WWGFD > /dev/null
-security import ./Enterprise_Distribution.p12 -A -k login.keychain -P jamdat1 > /dev/null
-security import ./ROW_Distribution_1.p12 -A -k login.keychain -P jamdat1 > /dev/null
-security import ./ROW_Distribution_2.p12 -A -k login.keychain -P jamdat1 > /dev/null
+security unlock-keychain -p $keychain_pw login.keychain
+for file in *.p12; do
+    security import $file -A -k login.keychain -P $cert_pw > /dev/null
+done
 security lock-keychain login.keychain
 
 popd > /dev/null
